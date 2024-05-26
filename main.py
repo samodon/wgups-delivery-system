@@ -30,7 +30,7 @@ class delivery:
 
     def get_distance(self, start_address, end_address):
         row, col = np.where(self.df == start_address)
-        print(self.df.at[row[0], end_address])
+        # print(self.df.at[row[0], end_address])
         return self.df.at[row[0], end_address]
 
     def _get_time(self, distance):
@@ -62,6 +62,10 @@ def main():
 
     # print(truck1.packages[0].delivery_address)
     delivery1 = delivery()
+
+    for i in range(0, len(truck2.packages)):
+        print(truck2.packages[i])
+
     delivery1.get_distance("1060 Dalton Ave S", "4001 South 700 East")
 
 
