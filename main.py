@@ -1,4 +1,5 @@
 from hashtable import HashTable
+import numpy as np
 import pandas
 from package import Package
 
@@ -12,8 +13,33 @@ class Truck:
         self.packages.append(package)
 
 
+class delivery:
+    def __init__(self):
+        self.delivery_time = 800
+        self.df = self.clean_df("WGUPS_Distance_Table.csv")
+
+    def clean_df(self, csv_file):
+        df = pandas.read_csv(csv_file)
+        df[df.columns[0]] = df[df.columns[0]].str.strip()
+        df.columns = df.columns.str.strip()
+
+        return df
+
+    def deliver(self, truck):
+        pass
+
+    def get_distance(self, start_address, end_address):
+        row, col = np.where(self.df == start_address)
+        print(self.df.at[row[0], end_address])
+        return self.df.at[row[0], end_address]
+
+    def _get_time(self, distance):
+        time = distance / 18
+        self.time = (time * 60) + self.time
+        return
+
+
 def main():
-    # Create a hashtable
     package_table = HashTable()
     df = pandas.read_csv("WGUPS Package File.csv")
     for index, row in df.iterrows():
@@ -28,14 +54,15 @@ def main():
         )
         package_table.insert(package.id, package)
 
-    # Create Trucks
     truck1 = Truck()
     truck2 = Truck()
     truck3 = Truck()
 
     load_trucks(package_table, truck1, truck2, truck3)
 
-    print(truck1.packages[0])
+    # print(truck1.packages[0].delivery_address)
+    delivery1 = delivery()
+    delivery1.get_distance("1060 Dalton Ave S", "4001 South 700 East")
 
 
 def load_trucks(package, truck1, truck2, truck3):
