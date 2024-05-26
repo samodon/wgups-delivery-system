@@ -3,6 +3,15 @@ import pandas
 from package import Package
 
 
+class Truck:
+    def __init__(self):
+        self.packages = []
+        self.current_location = None
+
+    def load_truck(self, package):
+        self.packages.append(package)
+
+
 def main():
     # Create a hashtable
     package_table = HashTable()
@@ -19,7 +28,39 @@ def main():
         )
         package_table.insert(package.id, package)
 
-    print(package_table.search(24))
+    # Create Trucks
+    truck1 = Truck()
+    truck2 = Truck()
+    truck3 = Truck()
+
+    load_trucks(package_table, truck1, truck2, truck3)
+
+    print(truck1.packages[0])
+
+
+def load_trucks(package, truck1, truck2, truck3):
+    for i in range(1, package.size):
+        if len(truck2.packages) < 16:
+            if package.search(i).id == 3:
+                truck2.load_truck(package.search(i))
+            elif package.search(i).id == 18:
+                truck2.load_truck(package.search(i))
+            elif package.search(i).id == 36:
+                truck2.load_truck(package.search(i))
+            elif package.search(i).id == 38:
+                truck2.load_truck(package.search(i))
+            elif (
+                package.search(i).id == 15
+                or package.search(i).id == 19
+                or package.search(i).id == 13
+            ):
+                truck2.load_truck(package.search(i))
+            else:
+                truck2.load_truck(package.search(i))
+        elif len(truck1.packages) < 16:
+            truck1.load_truck(package.search(i))
+        else:
+            truck3.load_truck(package.search(i))
 
 
 if __name__ == "__main__":
