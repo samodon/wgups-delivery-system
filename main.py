@@ -35,11 +35,18 @@ def main():
     load_trucks(package_table, truck1, truck2, truck3)
 
     delivery1 = delivery()
+    distances = delivery1.distances
+    #
+    print(distances["6351 South 900 East"])
 
-    for i in range(0, len(truck3.packages)):
-        print(truck3.packages[i])
-
-    delivery1.get_distance("1060 Dalton Ave S", "4001 South 700 East")
+    for i in range(1, len(truck1.packages)):
+        break
+        print(truck1.packages[i].delivery_address)
+        print(
+            delivery1.get_distance(
+                truck1.packages[i].delivery_address, "4001 South 700 East"
+            )
+        )
 
 
 def load_trucks(package, truck1, truck2, truck3):
