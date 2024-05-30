@@ -2,8 +2,8 @@ import csv
 
 
 class delivery:
-    def __init__(self):
-        self.delivery_time = 800
+    def __init__(self, delivery_time):
+        self.delivery_time = delivery_time
         self.file_path = "WGUPS_Distance_Table.csv"
         self.route = []
         self.distances = {}
@@ -40,14 +40,12 @@ class delivery:
                     locations[route[index - 1]].delivery_address,
                     locations[route[index]].delivery_address,
                 )
-                print()
+                locations[route[index]].delivery_status = "Delivered"
                 self._get_time(distance)
                 hours = int(self.delivery_time // 100)
-                minutes = int(self.delivery_time % 100)
-                print(f"{hours}:{minutes}")
-                # print(distance)
+                minutes = int(self.delivery_time % 60)
+                print(f"{hours}:{minutes:02d}")
 
-    # THIS NEEDS TO BE REDONE
     def _get_time(self, distance):
         time = distance / 18
         self.delivery_time += time * 60
