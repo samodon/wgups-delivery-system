@@ -29,8 +29,6 @@ class delivery:
         to_address = to_address.strip()
         return self.distances[from_address][to_address]
 
-    # THIS NEEDS TO BE REDONE
-
     def deliver(self, route, locations):
         for index in route:
             if index == 0:
@@ -40,11 +38,12 @@ class delivery:
                     locations[route[index - 1]].delivery_address,
                     locations[route[index]].delivery_address,
                 )
-                locations[route[index]].delivery_status = "Delivered"
                 self._get_time(distance)
                 hours = int(self.delivery_time // 100)
                 minutes = int(self.delivery_time % 60)
-                print(f"{hours}:{minutes:02d}")
+                locations[
+                    route[index]
+                ].delivery_status = f"Delivered at {hours}:{minutes:02d}"
 
     def _get_time(self, distance):
         time = distance / 18
