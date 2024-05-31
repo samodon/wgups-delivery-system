@@ -34,14 +34,22 @@ def main():
     truck3 = Truck()
     user_input = 0
 
+    print("Welcome to the WGUPS delivery system. What would you like to do?")
     while user_input != 4:
-        print("Welcome to the WGUPS delivery system. What would you like to do?")
         print("1. Load Trucks")
         print("2. Deliver Packages")
         print("3. Check Package Status")
         print("4. Exit")
         user_input = int(input("Select an option: "))
+
         if user_input == 1:
+            if (
+                len(truck1.packages) > 0
+                or len(truck2.packages) > 0
+                or len(truck3.packages) > 0
+            ):
+                print("Trucks have already been loaded")
+                continue
             load_trucks(package_table, truck1, truck2, truck3)
             print(f"Truck 1 has been loaded with {len(truck1.packages)} packages")
             print(f"Truck 2 has been loaded with {len(truck2.packages)} packages")
@@ -52,19 +60,24 @@ def main():
             else:
                 delivery1 = delivery(800)
                 delivery2 = delivery(800)
-                print("Truck 1 and Truck 2 out delivery packages!")
+                print("Truck 1 and Truck 2 out delivering packages!")
+
                 delivery2.nearest_neighbor(truck2.packages)
                 delivery1.nearest_neighbor(truck1.packages)
+
                 delivery1.deliver(delivery1.route, truck1.packages)
                 delivery2.deliver(delivery2.route, truck2.packages)
+
                 if delivery1.delivery_time < delivery2.delivery_time:
                     print("Truck 3 out for delivery")
                     distance_to_hub = delivery1.get_distances(
                         truck1.packages[delivery1.route[-1]].delivery_address,
                         "4001 South 700 East",
                     )
+
                     delivery1._get_time(distance_to_hub)
                     delivery3 = delivery(delivery1.delivery_time)
+
                     delivery3.nearest_neighbor(truck3.packages)
                     delivery3.deliver(delivery3.route, truck3.packages)
                 else:
@@ -73,10 +86,13 @@ def main():
                         truck2.packages[delivery2.route[-1]].delivery_address,
                         "4001 South 700 East",
                     )
+
                     delivery2._get_time(distance_to_hub)
                     delivery3 = delivery(delivery2.delivery_time)
+
                     delivery3.nearest_neighbor(truck3.packages)
                     delivery3.deliver(delivery3.route, truck3.packages)
+
                 for i in range(1, (package_table.size)):
                     if i < len(truck1.packages):
                         if truck1.packages[i].id == package_table.search(i).id:
@@ -103,7 +119,15 @@ def main():
                     print(package_table.search(i))
             elif option == 2:
                 package_id = int(input("Enter the package ID: "))
-                print(package_table.search(package_id))
+                if package_id > package_table.size:
+                    print("Invalid package ID")
+                else:
+                    print(package_table.search(package_id))
+
+        elif user_input == 4:
+            print("Goodbye!")
+        else:
+            print("Invalid input. Please try again.")
 
 
 def load_trucks(package, truck1, truck2, truck3):
