@@ -29,6 +29,7 @@ class delivery:
         to_address = to_address.strip()
         return self.distances[from_address][to_address]
 
+    # TODO add a way to print the status of the packages at the times specified
     def deliver(self, route, locations):
         for index in route:
             if index == 0:
@@ -44,6 +45,7 @@ class delivery:
                 locations[
                     route[index]
                 ].delivery_status = f"Delivered at {hours}:{minutes:02d}"
+                locations[route[index]].delivery_time = self.delivery_time
 
     def _get_time(self, distance):
         time = distance / 18

@@ -1,0 +1,9 @@
+##[pylyzer] failed /users/samorye/wgups_package_delivery/hashtable.py 1717041534 879
+.HashTable: ClassType
+.HashTable.size: Never
+.HashTable.table: Never
+.HashTable.__call__: (size: Obj, table: Obj) -> .HashTable
+.HashTable.hash: |Type_2 <: Structural({.__mod__ = (self: Never, R) -> O}), R: Type, O <: Structural({.__add__ = (self: Never, R) -> O}), O: Type|(self: .HashTable, key: Type_2, n: R) -> O
+.HashTable.insert: |Type_2 <: Structural({.__mod__ = (self: Never, R) -> K}), K <: Structural({.__add__ = (self: Never, R) -> Obj}), R :> Nat, R :> {0}|(self: .HashTable, key: Type_2, value: Obj) -> NoneType
+.HashTable.search: |Type_2 <: Structural({.__mod__ = (self: Never, R) -> K}), R :> {0}, K <: Structural({.__add__ = (self: Never, R) -> Obj}), R :> Nat|(self: .HashTable, key: Type_2) -> {None}
+

@@ -1,0 +1,16 @@
+##[pylyzer] failed /users/samorye/wgups_package_delivery/delivery.py 1717118467 2544
+.csv: Never
+
+.Type_delivery: ClassType
+.Type_delivery.delivery_time: Never
+.Type_delivery.file_path: Never
+.Type_delivery.distances: Never
+.Type_delivery.route: Never
+.Type_delivery.addresses: Never
+.Type_delivery.__call__: (delivery_time: Obj, file_path: Obj, route: Obj, distances: Obj, addresses: Obj) -> .Type_delivery
+.Type_delivery._read_distances: (self: .Type_delivery, file_path: PathLike) -> NoneType
+.Type_delivery.get_distances: (self: .Type_delivery, from_address: Str, to_address: Str) -> Never
+.Type_delivery.deliver: |K :> Int, K: Type, Self <: Iterable({0}) and Indexable(K, K), Self <: Indexable(K, V), V: Type|(self: .Type_delivery, route: Self, locations: Self) -> NoneType
+.Type_delivery._get_time: (self: .Type_delivery, distance: {0}) -> NoneType
+.Type_delivery.nearest_neighbor: |Type_17 <: Structural({.__len__ = (self: Never) -> Nat; .index = (self: Obj, Type_50) -> Type_52; .__getitem__ = (self: Obj, Int) -> Type_60}), Type_52: Type, Type_60: Type, Type_17 <: Structural({.__len__ = (self: Never) -> Nat; .index = (self: Type_17, Type_50) -> Type_52; .__getitem__ = (self: Type_17, Int) -> Type_60}), Type_50: Type|(self: .Type_delivery, locations: Type_17) -> NoneType
+

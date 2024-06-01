@@ -29,6 +29,7 @@ def main():
         )
         package_table.insert(package.id, package)
 
+    package_table.search(9).delivery_address = "410 S State St"
     truck1 = Truck()
     truck2 = Truck()
     truck3 = Truck()
@@ -51,9 +52,9 @@ def main():
                 print("Trucks have already been loaded")
                 continue
             load_trucks(package_table, truck1, truck2, truck3)
-            print(f"Truck 1 has been loaded with {len(truck1.packages)} packages")
-            print(f"Truck 2 has been loaded with {len(truck2.packages)} packages")
-            print(f"Truck 3 has been loaded with {len(truck3.packages)} packages")
+        #            print(f"Truck 1 has been loaded with {len(truck1.packages)} packages")
+        #           print(f"Truck 2 has been loaded with {len(truck2.packages)} packages")
+        #          print(f"Truck 3 has been loaded with {len(truck3.packages)} packages")
         elif user_input == 2:
             if len(truck1.packages) == 0:
                 print("Trucks have not been loaded yet")
@@ -70,49 +71,61 @@ def main():
 
                 if delivery1.delivery_time < delivery2.delivery_time:
                     print("Truck 3 out for delivery")
-                    distance_to_hub = delivery1.get_distances(
-                        truck1.packages[delivery1.route[-1]].delivery_address,
-                        "4001 South 700 East",
-                    )
+                    # distance_to_hub = delivery1.get_distances(
+                    # truck1.packages[delivery1.route[-1]].delivery_address,
+                    # "4001 South 700 East",
+                    # )
 
-                    delivery1._get_time(distance_to_hub)
+                    # delivery1._get_time(distance_to_hub)
                     delivery3 = delivery(delivery1.delivery_time)
 
                     delivery3.nearest_neighbor(truck3.packages)
                     delivery3.deliver(delivery3.route, truck3.packages)
                 else:
                     print("Truck 3 out for delivery")
-                    distance_to_hub = delivery2.get_distances(
-                        truck2.packages[delivery2.route[-1]].delivery_address,
-                        "4001 South 700 East",
-                    )
+                    # distance_to_hub = delivery2.get_distances(
+                    # truck2.packages[delivery2.route[-1]].delivery_address,
+                    # "4001 South 700 East",
+                    # )
 
-                    delivery2._get_time(distance_to_hub)
+                    # delivery2._get_time(distance_to_hub)
                     delivery3 = delivery(delivery2.delivery_time)
 
                     delivery3.nearest_neighbor(truck3.packages)
                     delivery3.deliver(delivery3.route, truck3.packages)
 
-                for i in range(1, (package_table.size)):
+                for i in range(1, (package_table.size - 1)):
                     if i < len(truck1.packages):
                         if truck1.packages[i].id == package_table.search(i).id:
                             package_table.search(i).delivery_status = truck1.packages[
                                 i
                             ].delivery_status
+                            package_table.search(i).delivery_time = truck1.packages[
+                                i
+                            ].delivery_time
+
                     if i < len(truck2.packages):
                         if truck2.packages[i].id == package_table.search(i).id:
                             package_table.search(i).delivery_status = truck2.packages[
                                 i
                             ].delivery_status
+                            package_table.search(i).delivery_time = truck2.packages[
+                                i
+                            ].delivery_time
+
                     if i < len(truck3.packages):
                         if truck3.packages[i].id == package_table.search(i).id:
                             package_table.search(i).delivery_status = truck3.packages[
                                 i
                             ].delivery_status
+                            package_table.search(i).delivery_time = truck3.packages[
+                                i
+                            ].delivery_time
         elif user_input == 3:
             print("Choose an option:")
             print("1. Check all packages")
             print("2. Check a specific package")
+            print("3. Select by time period")
             option = int(input("Select an option: "))
             if option == 1:
                 for i in range(1, (package_table.size)):
@@ -123,7 +136,13 @@ def main():
                     print("Invalid package ID")
                 else:
                     print(package_table.search(package_id))
-
+            elif option == 3:
+                time = int(input("Enter the time: "))
+                for i in range(1, (package_table.size)):
+                    if package_table.search(i).delivery_time <= time:
+                        print(package_table.search(i))
+                    else:
+                        continue
         elif user_input == 4:
             print("Goodbye!")
         else:
@@ -131,28 +150,24 @@ def main():
 
 
 def load_trucks(package, truck1, truck2, truck3):
-    for i in range(1, package.size):
-        if len(truck2.packages) < 16:
-            if package.search(i).id == 3:
-                truck2.load_truck(package.search(i))
-            elif package.search(i).id == 18:
-                truck2.load_truck(package.search(i))
-            elif package.search(i).id == 36:
-                truck2.load_truck(package.search(i))
-            elif package.search(i).id == 38:
-                truck2.load_truck(package.search(i))
-            elif (
-                package.search(i).id == 15
-                or package.search(i).id == 19
-                or package.search(i).id == 13
-            ):
-                truck2.load_truck(package.search(i))
-            else:
-                truck2.load_truck(package.search(i))
-        elif len(truck1.packages) < 16:
-            truck1.load_truck(package.search(i))
-        else:
-            truck3.load_truck(package.search(i))
+    truck1_ids = [1, 13, 14, 15, 16, 19, 20, 27, 29, 30, 31, 34, 37, 40]
+    truck2_ids = [2, 3, 4, 5, 9, 18, 26, 28, 32, 35, 36, 38]
+    truck3_ids = [6, 7, 8, 10, 11, 12, 17, 21, 22, 23, 24, 25, 33, 39]
+
+    for package_id in truck1_ids:
+        pkg = package.search(package_id)
+        if pkg:
+            truck1.load_truck(pkg)
+
+    for package_id in truck2_ids:
+        pkg = package.search(package_id)
+        if pkg:
+            truck2.load_truck(pkg)
+
+    for package_id in truck3_ids:
+        pkg = package.search(package_id)
+        if pkg:
+            truck3.load_truck(pkg)
 
 
 if __name__ == "__main__":

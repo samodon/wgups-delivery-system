@@ -11,10 +11,7 @@ class HashTable:
         index = self.hash(key, n)
         while self.table[index] is not None:
             n += 1
-            # print(f"Collision occurred at {index}")
             index = self.hash(key, n)
-            # print(f"Checking index {index}")
-        # print(f"Found index at {index}")
         self.table[index] = (key, value)
 
     def search(self, key):

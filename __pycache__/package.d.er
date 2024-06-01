@@ -1,0 +1,12 @@
+##[pylyzer] succeed /users/samorye/wgups_package_delivery/package.py 1717104536 697
+.Package: ClassType
+.Package.delivery_address: Never
+.Package.delivery_city: Never
+.Package.package_weight: Never
+.Package.delivery_status: Never
+.Package.delivery_zip: Never
+.Package.id: Never
+.Package.delivery_deadline: Never
+.Package.__call__: (id: Obj, delivery_address: Obj, delivery_deadline: Obj, delivery_city: Obj, delivery_zip: Obj, package_weight: Obj, delivery_status: Obj) -> .Package
+.Package.__str__: (self: .Package) -> Never
+
