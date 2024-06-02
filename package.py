@@ -1,4 +1,5 @@
 class Package:
+    # Constructor for the package object, time added for comparisions
     def __init__(
         self,
         id,
