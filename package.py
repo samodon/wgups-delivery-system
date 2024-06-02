@@ -19,4 +19,4 @@ class Package:
         self.delivery_time = 800
 
     def __str__(self):
-        return f"{self.id} {self.delivery_address} {self.delivery_deadline} {self.delivery_city} {self.delivery_zip} {self.package_weight} {self.delivery_status}"
+        return f"{self.id} {self.delivery_address} {self.delivery_deadline} {self.delivery_city} {self.delivery_zip} {self.package_weight} {self.delivery_status} "

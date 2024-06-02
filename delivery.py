@@ -1,4 +1,5 @@
 import csv
+from package import Package
 
 
 class delivery:
@@ -30,7 +31,8 @@ class delivery:
         return self.distances[from_address][to_address]
 
     # TODO add a way to print the status of the packages at the times specified
-    def deliver(self, route, locations):
+    def deliver(self, route, locations, truck):
+        distance = 0
         for index in route:
             if index == 0:
                 self._get_time(0)
@@ -46,25 +48,37 @@ class delivery:
                     route[index]
                 ].delivery_status = f"Delivered at {hours}:{minutes:02d}"
                 locations[route[index]].delivery_time = self.delivery_time
+                truck.total_distance += distance
 
     def _get_time(self, distance):
         time = distance / 18
         self.delivery_time += time * 60
 
     def nearest_neighbor(self, locations):
+        hub = Package(
+            0, "4001 South 700 East", 0, "Salt Lake City", "84107", 0, "At Hub"
+        )
+        locations.insert(0, hub)
         visited = [False] * len(locations)
         visited[0] = True
-        nearest = None
-        self.route.append(locations.index(locations[0]))
-        for i in range(len(locations)):
+        self.route.append(0)
+        current_index = 0
+
+        for _ in range(1, len(locations)):
             min_distance = float("inf")
+            nearest = None
+
             for j in range(len(locations)):
                 if not visited[j]:
                     distance = self.get_distances(
-                        locations[i].delivery_address, locations[j].delivery_address
+                        locations[current_index].delivery_address,
+                        locations[j].delivery_address,
                     )
                     if distance < min_distance:
                         min_distance = distance
                         nearest = j
-            visited[nearest] = True
-            self.route.append(nearest)
+
+            if nearest is not None:
+                visited[nearest] = True
+                self.route.append(nearest)
+                current_index = nearest

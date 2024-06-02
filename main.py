@@ -8,6 +8,7 @@ class Truck:
     def __init__(self):
         self.packages = []
         self.current_location = None
+        self.total_distance = 0
 
     def load_truck(self, package):
         package.delivery_status = "Loaded into Truck"
@@ -40,7 +41,8 @@ def main():
         print("1. Load Trucks")
         print("2. Deliver Packages")
         print("3. Check Package Status")
-        print("4. Exit")
+        print("4. Get Truck Distance")
+        print("5. Exit")
         user_input = int(input("Select an option: "))
 
         if user_input == 1:
@@ -52,7 +54,7 @@ def main():
                 print("Trucks have already been loaded")
                 continue
             load_trucks(package_table, truck1, truck2, truck3)
-        #            print(f"Truck 1 has been loaded with {len(truck1.packages)} packages")
+        #           print(f"Truck 1 has been loaded with {len(truck1.packages)} packages")
         #           print(f"Truck 2 has been loaded with {len(truck2.packages)} packages")
         #          print(f"Truck 3 has been loaded with {len(truck3.packages)} packages")
         elif user_input == 2:
@@ -66,8 +68,8 @@ def main():
                 delivery2.nearest_neighbor(truck2.packages)
                 delivery1.nearest_neighbor(truck1.packages)
 
-                delivery1.deliver(delivery1.route, truck1.packages)
-                delivery2.deliver(delivery2.route, truck2.packages)
+                delivery1.deliver(delivery1.route, truck1.packages, truck1)
+                delivery2.deliver(delivery2.route, truck2.packages, truck2)
 
                 if delivery1.delivery_time < delivery2.delivery_time:
                     print("Truck 3 out for delivery")
@@ -80,7 +82,7 @@ def main():
                     delivery3 = delivery(delivery1.delivery_time)
 
                     delivery3.nearest_neighbor(truck3.packages)
-                    delivery3.deliver(delivery3.route, truck3.packages)
+                    delivery3.deliver(delivery3.route, truck3.packages, truck3)
                 else:
                     print("Truck 3 out for delivery")
                     # distance_to_hub = delivery2.get_distances(
@@ -92,8 +94,10 @@ def main():
                     delivery3 = delivery(delivery2.delivery_time)
 
                     delivery3.nearest_neighbor(truck3.packages)
-                    delivery3.deliver(delivery3.route, truck3.packages)
-
+                    delivery3.deliver(delivery3.route, truck3.packages, truck3)
+                truck1.packages[
+                    0
+                ].delivery_status = f"Delivered at {delivery1.delivery_time}"
                 for i in range(1, (package_table.size - 1)):
                     if i < len(truck1.packages):
                         if truck1.packages[i].id == package_table.search(i).id:
@@ -144,6 +148,10 @@ def main():
                     else:
                         continue
         elif user_input == 4:
+            print(f"Truck 1 total distance: {truck1.total_distance:.2f} miles")
+            print(f"Truck 2 total distance: {truck2.total_distance:.2f} miles")
+            print(f"Truck 3 total distance: {truck3.total_distance:.2f} miles")
+        elif user_input == 5:
             print("Goodbye!")
         else:
             print("Invalid input. Please try again.")
