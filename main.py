@@ -135,9 +135,7 @@ def main():
                                 package_in_table.delivery_status = (
                                     f"Delivered at {hours}:{minutes:02}"
                                 )
-                                package_in_table.delivery_time = (
-                                    truck_package.delivery_time
-                                )
+                                package_in_table.delivery_time = hours * 100 + minutes
                                 break  # Found the package, no need to check further.
 
                         # Check packages in truck 2
@@ -149,23 +147,20 @@ def main():
                                 package_in_table.delivery_status = (
                                     f"Delivered at {hours}:{minutes:02}"
                                 )
-                                package_in_table.delivery_time = (
-                                    truck_package.delivery_time
-                                )
+                                package_in_table.delivery_time = hours * 100 + minutes
                                 break  # Found the package, no need to check further.
 
                         # Check packages in truck 3
                         for truck_package in truck3.packages:
                             if truck_package.id == package_in_table.id:
+                                # Stores the correct time in 24 hour format
                                 hours = int(truck_package.delivery_time // 100)
                                 minutes = int(truck_package.delivery_time % 60)
 
                                 package_in_table.delivery_status = (
                                     f"Delivered at {hours}:{minutes:02}"
                                 )
-                                package_in_table.delivery_time = (
-                                    truck_package.delivery_time
-                                )
+                                package_in_table.delivery_time = hours * 100 + minutes
                                 break  # Found the package, no need to check further.
 
         # Checks the status of the packages
@@ -197,24 +192,23 @@ def main():
                     print(package_table.search(1).delivery_time)
                     for i in range(1, (package_table.size)):
                         if (
-                            package_table.search(i).delivery_time >= 859.0
-                            and package_table.search(i).delivery_time <= 942.0
+                            package_table.search(i).delivery_time >= 835
+                            and package_table.search(i).delivery_time <= 925
                         ):
                             print(package_table.search(i))
-                            print(package_table.search(i).delivery_time)
                 elif time == 2:
                     for i in range(1, (package_table.size)):
                         if (
-                            package_table.search(i).delivery_time >= 959
-                            and package_table.search(i).delivery_time <= 1042
+                            package_table.search(i).delivery_time >= 935
+                            and package_table.search(i).delivery_time <= 1025
                         ):
                             print(package_table.search(i).delivery_time)
 
                 elif time == 3:
                     for i in range(1, (package_table.size)):
                         if (
-                            package_table.search(i).delivery_time >= 1205
-                            and package_table.search(i).delivery_time <= 1320
+                            package_table.search(i).delivery_time >= 1203
+                            and package_table.search(i).delivery_time <= 1312
                         ):
                             print(package_table.search(i))
         elif user_input == 4:
