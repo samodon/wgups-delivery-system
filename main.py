@@ -1,10 +1,13 @@
+# Jovane Samuels Sudent_ID: 012-207-161
+# WGUPS Delivery system
+
 from hashtable import HashTable
 import pandas
 from package import Package
 from delivery import delivery
 
 
-# Trruck class, used to create truck objects and load packages into them
+# Truck class, used to create truck objects and load packages into them
 class Truck:
     def __init__(self):
         self.packages = []
@@ -12,8 +15,8 @@ class Truck:
         self.total_distance = 0
 
     def load_truck(self, package):
-        # Update the package status to "Loaded into Truck"
-        package.delivery_status = "Loaded into Truck"
+        # Update the package status to "At Hub"
+        package.delivery_status = "At Hub"
         self.packages.append(package)
 
 
@@ -46,6 +49,8 @@ def main():
     truck3 = Truck()
     user_input = 0
 
+    # Flag to check if the trucks have been delivered
+    isdelivered = False
     # Main menu for the delivery system
     print("Welcome to the WGUPS delivery system. What would you like to do?")
     while user_input != 5:
@@ -71,8 +76,13 @@ def main():
             # Confirms that the trucks have been loaded before delivering packages
             if len(truck1.packages) == 0:
                 print("Trucks have not been loaded yet")
+
+            if isdelivered:
+                print("Trucks are already delivered")
             else:
+                isdelivered = True
                 # initialize the delivery objects, 800 is the start time for the first trucks
+
                 delivery1 = delivery(800)
                 delivery2 = delivery(800)
                 print("Truck 1 and Truck 2 out delivering packages!")
@@ -105,12 +115,13 @@ def main():
 
                 # Determines the truck that will leave the hub next based on which one arrives back first
                 if delivery1.delivery_time < delivery2.delivery_time:
-                    print("Truck 3 out for delivery")
                     delivery3 = delivery(delivery1.delivery_time + truck1_time_to_hub)
                     delivery3.nearest_neighbor(truck3.packages)
                     delivery3.deliver(delivery3.route, truck3.packages, truck3)
+
+                    print("Truck 3 out for delivery at")
                 else:
-                    print("Truck 3 out for delivery")
+                    # print("Truck 3 out for delivery")
                     delivery3 = delivery(delivery2.delivery_time)
 
                     delivery3.nearest_neighbor(truck3.packages)
@@ -189,27 +200,41 @@ def main():
                 print("3. 12:03 - 1:12")
                 time = int(input("Select a time period: "))
                 if time == 1:
-                    print(package_table.search(1).delivery_time)
                     for i in range(1, (package_table.size)):
                         if (
-                            package_table.search(i).delivery_time >= 835
+                            package_table.search(i).delivery_time >= 800
                             and package_table.search(i).delivery_time <= 925
                         ):
                             print(package_table.search(i))
+                        # Packages not delivered before the time period is considered in transit
+
+                        else:
+                            print(
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit"
+                            )
                 elif time == 2:
                     for i in range(1, (package_table.size)):
                         if (
-                            package_table.search(i).delivery_time >= 935
+                            package_table.search(i).delivery_time >= 800
                             and package_table.search(i).delivery_time <= 1025
                         ):
-                            print(package_table.search(i).delivery_time)
-
+                            print(package_table.search(i))
+                        else:
+                            print(
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit"
+                            )
                 elif time == 3:
                     for i in range(1, (package_table.size)):
                         if (
-                            package_table.search(i).delivery_time >= 1203
+                            package_table.search(i).delivery_time >= 800
                             and package_table.search(i).delivery_time <= 1312
                         ):
+                            print(package_table.search(i))
+                        elif package_table.search(i).delivery_time > 1312:
+                            print(
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit"
+                            )
+                        else:
                             print(package_table.search(i))
         elif user_input == 4:
             # Prints the total distance traveled by each truck
