@@ -29,10 +29,6 @@ def main():
     with open(file_path, mode="r", encoding="utf-8-sig", newline="") as csv_file:
         csv_reader = csv.DictReader(csv_file)
 
-        # Print the headers to debug
-        headers = csv_reader.fieldnames
-        print("CSV Headers:", headers)
-
         for row in csv_reader:
             # Strip any leading/trailing spaces and quotes from the row values
             package = Package(
