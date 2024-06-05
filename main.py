@@ -2,8 +2,8 @@
 # WGUPS Delivery system
 
 from hashtable import HashTable
-import pandas
 from package import Package
+import csv
 from delivery import delivery
 
 
@@ -25,20 +25,26 @@ def main():
     package_table = HashTable()
 
     # Read the package file and load the packages into the hash table
+    file_path = "WGUPS Package File.csv"
+    with open(file_path, mode="r", encoding="utf-8-sig", newline="") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
 
-    df = pandas.read_csv("WGUPS Package File.csv")
+        # Print the headers to debug
+        headers = csv_reader.fieldnames
+        print("CSV Headers:", headers)
 
-    for index, row in df.iterrows():
-        package = Package(
-            row["Package\nID"],
-            row["Address"],
-            row["Delivery\nDeadline"],
-            row["City "],
-            row["Zip"],
-            row["Weight\nKILO"],
-            row["page 1 of 1PageSpecial Notes"],
-        )
-        package_table.insert(package.id, package)
+        for row in csv_reader:
+            # Strip any leading/trailing spaces and quotes from the row values
+            package = Package(
+                int(row["Package\nID"].strip()),
+                row["Address"].strip(),
+                row["Delivery\nDeadline"].strip(),
+                row["City "].strip(),
+                row["Zip"].strip(),
+                row["Weight\nKILO"].strip(),
+                row["page 1 of 1PageSpecial Notes"].strip(),
+            )
+            package_table.insert(package.id, package)
 
     # Set the delivery address for package 9 to the correct address
     package_table.search(9).delivery_address = "410 S State St"
