@@ -28,7 +28,7 @@ def main():
     file_path = "WGUPS Package File.csv"
     with open(file_path, mode="r", encoding="utf-8-sig", newline="") as csv_file:
         csv_reader = csv.DictReader(csv_file)
-
+        # O(n), n is the number of rows.
         for row in csv_reader:
             # Strip any leading/trailing spaces and quotes from the row values
             package = Package(
@@ -43,7 +43,6 @@ def main():
             package_table.insert(package.id, package)
 
     # Set the delivery address for package 9 to the correct address
-    package_table.search(9).delivery_address = "410 S State St"
 
     # Create truck objects
     truck1 = Truck()
@@ -120,8 +119,8 @@ def main():
                     delivery3 = delivery(delivery1.delivery_time + truck1_time_to_hub)
                     delivery3.nearest_neighbor(truck3.packages)
                     delivery3.deliver(delivery3.route, truck3.packages, truck3)
-
-                    print("Truck 3 out for delivery at")
+                    start_time = delivery1.delivery_time
+                    print("Truck 3 out for delivery")
                 else:
                     # print("Truck 3 out for delivery")
                     delivery3 = delivery(delivery2.delivery_time)
@@ -149,6 +148,7 @@ def main():
                                     f"Delivered at {hours}:{minutes:02}"
                                 )
                                 package_in_table.delivery_time = hours * 100 + minutes
+                                package_in_table.truck = 1
                                 break  # Found the package, no need to check further.
 
                         # Check packages in truck 2
@@ -160,6 +160,10 @@ def main():
                                 package_in_table.delivery_status = (
                                     f"Delivered at {hours}:{minutes:02}"
                                 )
+                                if package_in_table.id == 9:
+                                    package_in_table.delivery_address = "410 S State St"
+
+                                package_in_table.truck = 2
                                 package_in_table.delivery_time = hours * 100 + minutes
                                 break  # Found the package, no need to check further.
 
@@ -174,6 +178,7 @@ def main():
                                     f"Delivered at {hours}:{minutes:02}"
                                 )
                                 package_in_table.delivery_time = hours * 100 + minutes
+                                package_in_table.truck = 3
                                 break  # Found the package, no need to check further.
 
         # Checks the status of the packages
@@ -181,7 +186,8 @@ def main():
             print("Choose an option:")
             print("1. Check all packages")
             print("2. Check a specific package")
-            print("3. Select by time period")
+            print("3. Check all packages at a specified time")
+            print("4. Check at between time periods")
             option = int(input("Select an option: "))
 
             if option == 1:
@@ -195,8 +201,44 @@ def main():
                 else:
                     print(package_table.search(package_id))
 
-            # Checks the status of the packages based on the time delivered
             elif option == 3:
+                time_to_check = int(
+                    input(
+                        "Please enter the time as an integer in military time eg(800, 1300, etc): "
+                    )
+                )
+
+                for i in range(1, (package_table.size)):
+                    if package_table.search(i).delivery_time > time_to_check:
+                        if (
+                            package_table.search(i).truck == 3
+                            and time_to_check < start_time
+                        ):
+                            print(
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} At Hub, with Truck {package_table.search(i).truck}"
+                            )
+
+                        elif time_to_check <= 800:
+                            print(
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} At Hub with Truck {package_table.search(i).truck}"
+                            )
+
+                        elif package_table.search(i).id == 9:
+                            print(
+                                f"{package_table.search(i).id} 300 State St {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit with Truck {package_table.search(i).truck}"
+                            )
+
+                        else:
+                            print(
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit with Truck {package_table.search(i).truck}"
+                            )
+                    else:
+                        print(
+                            f"{ package_table.search(i) }, with Truck { package_table.search(i).truck}"
+                        )
+
+            # Checks the status of the packages based on the time delivered
+            elif option == 4:
                 print("1. 8:35 - 9:25")
                 print("2. 9:35 - 10:25")
                 print("3. 12:03 - 1:12")
@@ -207,12 +249,17 @@ def main():
                             package_table.search(i).delivery_time >= 800
                             and package_table.search(i).delivery_time <= 925
                         ):
-                            print(package_table.search(i))
+                            print(
+                                f"{ package_table.search(i) }, with Truck { package_table.search(i).truck}"
+                            )
                         # Packages not delivered before the time period is considered in transit
-
+                        elif package_table.search(i).id == 9:
+                            print(
+                                f"{package_table.search(i).id} 300 State St {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit, with Truck {package_table.search(i).truck}"
+                            )
                         else:
                             print(
-                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit"
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit, with Truck {package_table.search(i).truck}"
                             )
                 elif time == 2:
                     for i in range(1, (package_table.size)):
@@ -220,10 +267,12 @@ def main():
                             package_table.search(i).delivery_time >= 800
                             and package_table.search(i).delivery_time <= 1025
                         ):
-                            print(package_table.search(i))
+                            print(
+                                f"{ package_table.search(i) } with Truck { package_table.search(i).truck}"
+                            )
                         else:
                             print(
-                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit"
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit, with Truck {package_table.search(i).truck}"
                             )
                 elif time == 3:
                     for i in range(1, (package_table.size)):
@@ -231,13 +280,17 @@ def main():
                             package_table.search(i).delivery_time >= 800
                             and package_table.search(i).delivery_time <= 1312
                         ):
-                            print(package_table.search(i))
+                            print(
+                                f"{ package_table.search(i) }, with Truck { package_table.search(i).truck}"
+                            )
                         elif package_table.search(i).delivery_time > 1312:
                             print(
-                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit"
+                                f"{package_table.search(i).id} {package_table.search(i).delivery_address} {package_table.search(i).delivery_deadline} {package_table.search(i).delivery_city} {package_table.search(i).delivery_zip} {package_table.search(i).package_weight} In Transit, with Truck {package_table.search(i).truck}"
                             )
                         else:
-                            print(package_table.search(i))
+                            print(
+                                f"{ package_table.search(i) }, with Truck { package_table.search(i).truck}"
+                            )
         elif user_input == 4:
             # Prints the total distance traveled by each truck
             print(f"Truck 1 total distance: {truck1.total_distance:.2f} miles")
@@ -251,11 +304,12 @@ def main():
             print("Invalid input. Please try again.")
 
 
+# O(n)
 # Loading the trucks with the packages that need to be delivered, ordering them as needed
 def load_trucks(package, truck1, truck2, truck3):
-    truck1_ids = [13, 14, 15, 16, 19, 20, 27, 29, 30, 31, 34, 37, 40]
+    truck1_ids = [13, 14, 15, 16, 19, 20, 27, 29, 30, 25, 31, 34, 37, 40]
     truck2_ids = [2, 3, 4, 5, 9, 18, 26, 28, 32, 35, 36, 38]
-    truck3_ids = [6, 7, 8, 10, 11, 12, 17, 21, 22, 23, 24, 25, 33, 39, 1]
+    truck3_ids = [6, 7, 8, 10, 11, 12, 17, 21, 22, 23, 24, 33, 39, 1]
 
     for package_id in truck1_ids:
         pkg = package.search(package_id)

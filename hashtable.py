@@ -4,10 +4,12 @@ class HashTable:
         self.size = 41
         self.table = [None] * self.size
 
+    # O(1)
     # Hash function to calculate the index of the key in the table, using linear probing
     def hash(self, key, n):
         return (key % self.size) + n
 
+    # O(1) if there are no collisions, O(n) if there are collisions with linear probing
     def insert(self, key, value):
         # Counter to keep track of the number of collisions
         n = 0
@@ -18,6 +20,7 @@ class HashTable:
             index = self.hash(key, n)
         self.table[index] = (key, value)
 
+    # O(1) if there are no collisions, O(n) if there are collisions with linear probing
     def search(self, key):
         # initial index
         index = self.hash(key, 0)

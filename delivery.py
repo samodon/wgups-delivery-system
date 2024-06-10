@@ -11,6 +11,7 @@ class delivery:
         self.addresses = []
         self._read_distances(self.file_path)
 
+    # O(n^2)
     # Helper to read the distance table from the CSV file
     def _read_distances(self, file_path):
         with open(file_path, "r") as file:
@@ -24,12 +25,14 @@ class delivery:
                     to_address = self.addresses[i]
                     self.distances[from_address][to_address] = float(distance)
 
+    # O(1)
     # Get the distance between two addresses
     def get_distances(self, from_address, to_address):
         from_address = from_address.strip()
         to_address = to_address.strip()
         return self.distances[from_address][to_address]
 
+    # O(n)
     # Delivers the packages in the route
     def deliver(self, route, locations, truck):
         distance = 0
@@ -40,6 +43,7 @@ class delivery:
                 #  Keep the package with the wrong address until the correct address is avaialble
                 if truck.packages[route[index]].id == 9:
                     time_to_add = 1067 - self.delivery_time
+                    truck.packages[route[index]].delivery_address = "410 S State St"
                     self.delivery_time += time_to_add
                 distance = self.get_distances(
                     locations[route[index - 1]].delivery_address,
@@ -51,11 +55,13 @@ class delivery:
                 locations[route[index]].delivery_time = self.delivery_time
                 truck.total_distance += distance
 
+    # O(1)
     # Helper to get the time it takes to travel a distance
     def _get_time(self, distance):
         time = distance / 18
         self.delivery_time += time * 60
 
+    # O(n^2)
     # Nearest neighbor algorithm to find the shortest route
     def nearest_neighbor(self, locations):
         # Sets the starting location to the hub
